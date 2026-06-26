@@ -19,4 +19,4 @@ Single server component (`src/app/page.tsx`) reads data from filesystem cache (`
 - **Env vars**: `NOTION_TOKEN` and `NOTION_DATABASE_ID` required (server-only, not `NEXT_PUBLIC_*`)
 - **Path alias**: `@/*` → `./src/*`
 - **Docker**: multi-stage standalone build (`node:22-alpine`), runs as non-root `nextjs` user, published to GHCR via GitHub Actions on push to `main`/`dev`
-- **Navigation buttons**: defined in `buttons.yaml` at project root — each entry has `label` and `url`; file is read at request time and must be present in the runtime container
+- **Navigation buttons**: optional `buttons.yaml` at project root — each entry has `label` and `url`; file is read at request time, omitted file means no buttons are rendered

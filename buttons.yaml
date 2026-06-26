@@ -1,7 +1,0 @@
-# Navigation buttons rendered in the task tracker header.
-# Each entry becomes an external link button.
-buttons:
-  - label: "Weekly kanban"
-    url: "https://app.notion.com/p/38ac42a1162380f6860ce8d45ec97419?v=38ac42a1162380fb8f67000c794b27c1"
-  - label: "Add"
-    url: "https://portal.yattle-hydra.ts.net/form/notion-add"

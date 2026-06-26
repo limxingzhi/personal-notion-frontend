@@ -52,7 +52,7 @@ services:
 
 ### Navigation Buttons
 
-Create a `buttons.yaml` file in the project root to define external links rendered in the header:
+Optionally create a `buttons.yaml` in the project root (or mount it into the container) to define external links rendered in the header:
 
 ```yaml
 buttons:
