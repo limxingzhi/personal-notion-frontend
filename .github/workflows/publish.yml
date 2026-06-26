@@ -53,3 +53,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.tags.outputs.tags }}
           no-cache: true
+          build-args: |
+            NEXT_PUBLIC_KANBAN_LABEL=${{ vars.NEXT_PUBLIC_KANBAN_LABEL }}
+            NEXT_PUBLIC_KANBAN_URL=${{ vars.NEXT_PUBLIC_KANBAN_URL }}
+            NEXT_PUBLIC_ADD_LABEL=${{ vars.NEXT_PUBLIC_ADD_LABEL }}
+            NEXT_PUBLIC_ADD_URL=${{ vars.NEXT_PUBLIC_ADD_URL }}
