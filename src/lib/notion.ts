@@ -28,10 +28,6 @@ function getDate(prop: any): string | null {
 }
 
 export async function fetchFromNotion(): Promise<Task[]> {
-  const now = new Date()
-  const twoDaysLater = new Date(now)
-  twoDaysLater.setDate(twoDaysLater.getDate() + 2)
-
   const res = await fetch(
     `https://api.notion.com/v1/databases/${NOTION_DATABASE_ID}/query`,
     {
@@ -49,10 +45,12 @@ export async function fetchFromNotion(): Promise<Task[]> {
               status: { equals: "In progress" },
             },
             {
-              property: "Due Date",
-              date: {
-                on_or_before: twoDaysLater.toISOString().split("T")[0],
-              },
+              property: "Status",
+              status: { equals: "To Do" },
+            },
+            {
+              property: "Status",
+              status: { equals: "Done" },
             },
           ],
         },

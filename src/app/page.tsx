@@ -30,12 +30,13 @@ function relativeDate(dueDate: string | null): { text: string; tag: string | nul
   return { text: `In ${diffDays} days`, tag: null }
 }
 
-const SECTION_ORDER = ["In progress", "To Do"]
+const SECTION_ORDER = ["In progress", "To Do", "Done"]
 
 const SECTION_SUBTITLE: Record<string, string> = {
   "In progress": "Tackle these today.",
   "To Do": "On the horizon — next few days.",
   Inbox: "This week's watchlist.",
+  Done: "Cleared off the plate.",
 }
 
 function sectionRank(status: string): number {
