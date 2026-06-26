@@ -28,6 +28,9 @@ function getDate(prop: any): string | null {
 }
 
 export async function fetchFromNotion(): Promise<Task[]> {
+  const weekFromNow = new Date()
+  weekFromNow.setDate(weekFromNow.getDate() + 7)
+
   const res = await fetch(
     `https://api.notion.com/v1/databases/${NOTION_DATABASE_ID}/query`,
     {
@@ -51,6 +54,20 @@ export async function fetchFromNotion(): Promise<Task[]> {
             {
               property: "Status",
               status: { equals: "Done" },
+            },
+            {
+              and: [
+                {
+                  property: "Status",
+                  status: { equals: "Inbox" },
+                },
+                {
+                  property: "Due Date",
+                  date: {
+                    on_or_before: weekFromNow.toISOString().split("T")[0],
+                  },
+                },
+              ],
             },
           ],
         },
