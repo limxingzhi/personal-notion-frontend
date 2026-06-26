@@ -1,0 +1,11 @@
+# project dependencies
+/node_modules
+
+# local Notion cache
+/.cache
+
+# next.js build output
+.next/
+
+# environment variables
+.env.local
