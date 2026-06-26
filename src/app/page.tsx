@@ -57,6 +57,7 @@ export default function HomePage() {
   const [cachedLabel, setCachedLabel] = useState<string>("")
   const [updatedAt, setUpdatedAt] = useState<number | null>(null)
   const [config, setConfig] = useState<Config | null>(null)
+  const [description, setDescription] = useState<string>("")
 
   const fetchTasks = useCallback(async (refresh = false) => {
     setLoading(true)
@@ -73,6 +74,7 @@ export default function HomePage() {
   useEffect(() => {
     fetchTasks()
     fetch("/api/config").then(r => r.json()).then(setConfig)
+    fetch("/api/database").then(r => r.json()).then(data => setDescription(data.description))
   }, [fetchTasks])
 
   const sections = useMemo(() => {
@@ -130,6 +132,12 @@ export default function HomePage() {
           </button>
         </div>
       </div>
+
+      {description && (
+        <p className="mb-6 text-center text-sm italic text-gray-500 dark:text-gray-400">
+          {description}
+        </p>
+      )}
 
       {tasks.length === 0 && !loading ? (
         <p className="text-gray-500 dark:text-gray-400">No tasks to show.</p>
