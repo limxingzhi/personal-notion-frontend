@@ -11,6 +11,13 @@ interface Task {
   url: string
 }
 
+interface Config {
+  kanbanUrl: string
+  kanbanLabel: string
+  addUrl: string
+  addLabel: string
+}
+
 function relativeDate(dueDate: string | null): { text: string; tag: string | null } {
   if (!dueDate) return { text: "", tag: null }
   const due = new Date(dueDate)
@@ -30,7 +37,7 @@ function relativeDate(dueDate: string | null): { text: string; tag: string | nul
   return { text: `In ${diffDays} days`, tag: null }
 }
 
-const SECTION_ORDER = ["In progress", "To Do", "Done"]
+const SECTION_ORDER = ["In progress", "To Do", "Inbox", "Done"]
 
 const SECTION_SUBTITLE: Record<string, string> = {
   "In progress": "Tackle these today.",
@@ -49,6 +56,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [cachedLabel, setCachedLabel] = useState<string>("")
   const [updatedAt, setUpdatedAt] = useState<number | null>(null)
+  const [config, setConfig] = useState<Config | null>(null)
 
   const fetchTasks = useCallback(async (refresh = false) => {
     setLoading(true)
@@ -64,6 +72,7 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchTasks()
+    fetch("/api/config").then(r => r.json()).then(setConfig)
   }, [fetchTasks])
 
   const sections = useMemo(() => {
@@ -83,24 +92,24 @@ export default function HomePage() {
       <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">Task Tracker</h1>
         <div className="flex items-center gap-2">
-          {process.env.NEXT_PUBLIC_ADD_URL && (
+          {config?.addUrl && (
             <a
-              href={process.env.NEXT_PUBLIC_ADD_URL}
+              href={config.addUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded border px-3 py-1 text-sm transition hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800"
             >
-              {process.env.NEXT_PUBLIC_ADD_LABEL ?? "Add"}
+              {config.addLabel}
             </a>
           )}
-          {process.env.NEXT_PUBLIC_KANBAN_URL ? (
+          {config?.kanbanUrl ? (
             <a
-              href={process.env.NEXT_PUBLIC_KANBAN_URL}
+              href={config.kanbanUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded border px-3 py-1 text-sm transition hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800"
             >
-              {process.env.NEXT_PUBLIC_KANBAN_LABEL ?? "Kanban"}
+              {config.kanbanLabel}
             </a>
           ) : (
             <a

@@ -5,11 +5,6 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-ARG NEXT_PUBLIC_KANBAN_LABEL
-ARG NEXT_PUBLIC_KANBAN_URL
-ARG NEXT_PUBLIC_ADD_LABEL
-ARG NEXT_PUBLIC_ADD_URL
-
 COPY . .
 RUN NEXT_OUTPUT=standalone npm run build
 
