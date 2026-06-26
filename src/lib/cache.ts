@@ -11,10 +11,11 @@ interface CacheEntry {
   timestamp: number
 }
 
-export async function readCache(): Promise<{ data: any; fresh: boolean; timestamp: number } | null> {
+export async function readCache(name = "tasks"): Promise<{ data: any; fresh: boolean; timestamp: number } | null> {
+  const file = name === "tasks" ? CACHE_FILE : path.join(CACHE_DIR, `${name}.json`)
   try {
-    if (!existsSync(CACHE_FILE)) return null
-    const raw = await readFile(CACHE_FILE, "utf-8")
+    if (!existsSync(file)) return null
+    const raw = await readFile(file, "utf-8")
     const entry: CacheEntry = JSON.parse(raw)
     const fresh = Date.now() - entry.timestamp < TTL_MS
     return { data: entry.data, fresh, timestamp: entry.timestamp }
@@ -23,10 +24,11 @@ export async function readCache(): Promise<{ data: any; fresh: boolean; timestam
   }
 }
 
-export async function writeCache(data: any): Promise<void> {
+export async function writeCache(data: any, name = "tasks"): Promise<void> {
+  const file = name === "tasks" ? CACHE_FILE : path.join(CACHE_DIR, `${name}.json`)
   if (!existsSync(CACHE_DIR)) {
     await mkdir(CACHE_DIR, { recursive: true })
   }
   const entry: CacheEntry = { data, timestamp: Date.now() }
-  await writeFile(CACHE_FILE, JSON.stringify(entry), "utf-8")
+  await writeFile(file, JSON.stringify(entry), "utf-8")
 }

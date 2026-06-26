@@ -8,7 +8,7 @@ npm run dev / build / start / lint
 
 ## Architecture
 
-Single client component (`src/app/page.tsx`) fetches from 3 API routes on mount. `/api/tasks` reads a filesystem cache (`.cache/tasks.json`, 5-min TTL) and falls back to Notion REST API. `/api/database` fetches database description from Notion. `/api/config` returns public env vars for header links.
+Single server component (`src/app/page.tsx`) reads data from filesystem cache (`.cache/tasks.json`, `.cache/description.json`, both 5-min TTL) and renders a client component (`HomePageClient.tsx`). On cache miss, the client fetches from Notion via `/api/tasks` / `/api/database` on mount. `/api/config` returns public env vars for header links.
 
 ## Gotchas
 
