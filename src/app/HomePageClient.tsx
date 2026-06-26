@@ -11,11 +11,9 @@ interface Task {
   url: string
 }
 
-interface Config {
-  kanbanUrl: string
-  kanbanLabel: string
-  addUrl: string
-  addLabel: string
+interface Button {
+  label: string
+  url: string
 }
 
 function relativeDate(dueDate: string | null): { text: string; tag: string | null } {
@@ -54,7 +52,7 @@ function sectionRank(status: string): number {
 interface HomePageClientProps {
   initialTasks: Task[] | null
   initialDescription: string | null
-  initialConfig: Config | null
+  initialButtons: Button[]
   initialUpdatedAt: number | null
   initialCachedLabel: string | null
 }
@@ -62,7 +60,7 @@ interface HomePageClientProps {
 export default function HomePageClient({
   initialTasks,
   initialDescription,
-  initialConfig,
+  initialButtons,
   initialUpdatedAt,
   initialCachedLabel,
 }: HomePageClientProps) {
@@ -70,7 +68,7 @@ export default function HomePageClient({
   const [loading, setLoading] = useState(false)
   const [cachedLabel, setCachedLabel] = useState<string>(initialCachedLabel ?? "")
   const [updatedAt, setUpdatedAt] = useState<number | null>(initialUpdatedAt)
-  const [config, setConfig] = useState<Config | null>(initialConfig)
+  const [buttons, setButtons] = useState<Button[]>(initialButtons)
   const [description, setDescription] = useState<string>(initialDescription ?? "")
 
   const fetchTasks = async (refresh = false) => {
@@ -91,8 +89,8 @@ export default function HomePageClient({
     if (initialDescription === null) {
       fetch("/api/database").then(r => r.json()).then(data => setDescription(data.description))
     }
-    if (initialConfig === null) {
-      fetch("/api/config").then(r => r.json()).then(setConfig)
+    if (initialButtons.length === 0) {
+      fetch("/api/config").then(r => r.json()).then(data => setButtons(data.buttons ?? []))
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -113,35 +111,17 @@ export default function HomePageClient({
       <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">Task Tracker</h1>
         <div className="flex items-center gap-2">
-          {config?.addUrl && (
+          {buttons.map((btn, i) => (
             <a
-              href={config.addUrl}
+              key={i}
+              href={btn.url}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded border px-3 py-1 text-sm transition hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800"
             >
-              {config.addLabel}
+              {btn.label}
             </a>
-          )}
-          {config?.kanbanUrl ? (
-            <a
-              href={config.kanbanUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded border px-3 py-1 text-sm transition hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800"
-            >
-              {config.kanbanLabel}
-            </a>
-          ) : (
-            <a
-              href="https://app.notion.com/p/38ac42a1162380f6860ce8d45ec97419?v=38ac42a1162380fb8f67000c794b27c1"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded border px-3 py-1 text-sm transition hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800"
-            >
-              Week kanban
-            </a>
-          )}
+          ))}
           <button
             onClick={() => fetchTasks(true)}
             disabled={loading}

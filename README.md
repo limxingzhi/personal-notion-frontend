@@ -28,20 +28,39 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Docker
 
-```bash
-docker compose up
+```yaml
+services:
+  app:
+    image: ghcr.io/limxingzhi/personal-notion-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NOTION_TOKEN=${NOTION_TOKEN}
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
+    volumes:
+      - ./buttons.yaml:/app/buttons.yaml:ro
 ```
 
-## Environment Variables
+## Configuration
 
-| Variable | Required | Description | Default |
-|---|---|---|---|
-| `NOTION_TOKEN` | Yes | Notion internal integration token | — |
-| `NOTION_DATABASE_ID` | Yes | ID of the Notion tasks database | — |
-| `NEXT_PUBLIC_KANBAN_URL` | No | URL to open the kanban board view | — |
-| `NEXT_PUBLIC_KANBAN_LABEL` | No | Label text for the kanban link | `Week kanban` |
-| `NEXT_PUBLIC_ADD_URL` | No | URL for adding a new task | — |
-| `NEXT_PUBLIC_ADD_LABEL` | No | Label text for the add link | `Add` |
+### Notion API
+
+| Variable | Required | Description |
+|---|---|---|
+| `NOTION_TOKEN` | Yes | Notion internal integration token |
+| `NOTION_DATABASE_ID` | Yes | ID of the Notion tasks database |
+
+### Navigation Buttons
+
+Create a `buttons.yaml` file in the project root to define external links rendered in the header:
+
+```yaml
+buttons:
+  - label: "Weekly kanban"
+    url: "https://app.notion.com/..."
+  - label: "Add"
+    url: "https://example.com/add"
+```
 
 ## How It Works
 

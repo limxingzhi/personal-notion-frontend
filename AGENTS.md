@@ -8,7 +8,7 @@ npm run dev / build / start / lint
 
 ## Architecture
 
-Single server component (`src/app/page.tsx`) reads data from filesystem cache (`.cache/tasks.json`, `.cache/description.json`, both 5-min TTL) and renders a client component (`HomePageClient.tsx`). On cache miss, the client fetches from Notion via `/api/tasks` / `/api/database` on mount. `/api/config` returns public env vars for header links.
+Single server component (`src/app/page.tsx`) reads data from filesystem cache (`.cache/tasks.json`, `.cache/description.json`, both 5-min TTL) and renders a client component (`HomePageClient.tsx`). On cache miss, the client fetches from Notion via `/api/tasks` / `/api/database` on mount. `/api/config` returns navigation buttons from `buttons.yaml`.
 
 ## Gotchas
 
@@ -16,6 +16,7 @@ Single server component (`src/app/page.tsx`) reads data from filesystem cache (`
 - **Filter logic**: "In progress", "To Do", "Done" always included; "Inbox" only if due ≤7 days (date filter `on_or_before`)
 - **Notion properties**: `Name` (title), `Status` (status), `Due Date` (date), `Short note` (rich_text) — property names **case-sensitive**
 - **No tests** configured
-- **Env vars**: `NOTION_TOKEN` and `NOTION_DATABASE_ID` required (server-only, not `NEXT_PUBLIC_*`); `NEXT_PUBLIC_KANBAN_URL/LABEL` and `NEXT_PUBLIC_ADD_URL/LABEL` optional
+- **Env vars**: `NOTION_TOKEN` and `NOTION_DATABASE_ID` required (server-only, not `NEXT_PUBLIC_*`)
 - **Path alias**: `@/*` → `./src/*`
 - **Docker**: multi-stage standalone build (`node:22-alpine`), runs as non-root `nextjs` user, published to GHCR via GitHub Actions on push to `main`/`dev`
+- **Navigation buttons**: defined in `buttons.yaml` at project root — each entry has `label` and `url`; file is read at request time and must be present in the runtime container
