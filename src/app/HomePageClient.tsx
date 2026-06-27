@@ -158,9 +158,6 @@ export default function HomePageClient({
               <ul className="space-y-1">
                 {items.map((task) => {
                   const rd = relativeDate(task.dueDate)
-                  const archiveLabel = task.status === "Done" && task.archivedAt
-                    ? `Done ${relativeDate(task.archivedAt).text}`
-                    : null
 
                   return (
                     <li
@@ -180,10 +177,12 @@ export default function HomePageClient({
                           </span>
                         )}
                       </a>
-                      {archiveLabel ? (
-                        <span className="whitespace-nowrap text-xs text-gray-400 dark:text-gray-500">
-                          {archiveLabel}
-                        </span>
+                      {task.status === "Done" ? (
+                        rd.text && (
+                          <span className="text-xs text-gray-400 dark:text-gray-500">
+                            {rd.text}
+                          </span>
+                        )
                       ) : rd.tag ? (
                         <span className={`rounded px-2 py-0.5 text-xs font-medium ${rd.tag}`}>
                           {rd.text}

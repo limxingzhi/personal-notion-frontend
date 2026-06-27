@@ -9,3 +9,6 @@
 
 # environment variables
 .env.local
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
