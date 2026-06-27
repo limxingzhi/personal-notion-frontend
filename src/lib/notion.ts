@@ -5,6 +5,7 @@ export interface Task {
   dueDate: string | null
   shortNote: string
   url: string
+  archivedAt: string | null
 }
 
 const NOTION_TOKEN = process.env.NOTION_TOKEN!
@@ -89,5 +90,6 @@ export async function fetchFromNotion(): Promise<Task[]> {
     dueDate: getDate(page.properties["Due Date"]),
     shortNote: getRichText(page.properties["Short note"]),
     url: page.url,
+    archivedAt: page.last_edited_time ?? null,
   }))
 }
