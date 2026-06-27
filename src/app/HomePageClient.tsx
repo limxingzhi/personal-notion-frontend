@@ -73,13 +73,15 @@ export default function HomePageClient({
 
   const fetchTasks = async (refresh = false) => {
     setLoading(true)
-    const res = await fetch("/api/tasks", {
-      method: refresh ? "POST" : "GET",
-    })
-    const data = await res.json()
-    setTasks(data.tasks)
-    setCachedLabel(data.fresh ? "fresh" : "cached")
-    setUpdatedAt(data.updatedAt)
+    const [tasksRes, descRes] = await Promise.all([
+      fetch("/api/tasks", { method: refresh ? "POST" : "GET" }),
+      refresh ? fetch("/api/database", { method: "POST" }).then(r => r.json()) : Promise.resolve(null),
+    ])
+    const tasksData = await tasksRes.json()
+    setTasks(tasksData.tasks)
+    if (descRes) setDescription(descRes.description)
+    setCachedLabel(tasksData.fresh ? "fresh" : "cached")
+    setUpdatedAt(tasksData.updatedAt)
     setLoading(false)
   }
 
