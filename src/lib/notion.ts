@@ -29,6 +29,8 @@ export function getDate(prop: any): string | null {
 }
 
 export async function fetchFromNotion(): Promise<Task[]> {
+  console.log(`[notion] querying database ${NOTION_DATABASE_ID.slice(0, 8)}...`)
+
   const weekFromNow = new Date()
   weekFromNow.setDate(weekFromNow.getDate() + 7)
 
@@ -82,6 +84,7 @@ export async function fetchFromNotion(): Promise<Task[]> {
   }
 
   const data: any = await res.json()
+  console.log(`[notion] fetched ${data.results.length} tasks`)
 
   return data.results.map((page: any) => ({
     id: page.id,

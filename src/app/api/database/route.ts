@@ -6,6 +6,7 @@ const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID!
 const NOTION_VERSION = "2022-06-28"
 
 async function fetchDescription() {
+  console.log(`[notion] fetching database description`)
   const res = await fetch(
     `https://api.notion.com/v1/databases/${NOTION_DATABASE_ID}`,
     {
@@ -18,16 +19,19 @@ async function fetchDescription() {
   )
 
   if (!res.ok) {
+    console.log(`[notion] description fetch failed: ${res.status}`)
     return { description: "" }
   }
 
   const data: any = await res.json()
   const description = data.description?.map((t: any) => t.plain_text).join("") ?? ""
+  console.log(`[notion] description: ${description.slice(0, 60)}${description.length > 60 ? "..." : ""}`)
   await writeCache(description, "description")
   return { description }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  console.log(`[api] GET /api/database ${request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"}`)
   const cached = await readCache("description")
   if (cached) {
     return NextResponse.json({ description: cached.data, fresh: cached.fresh, updatedAt: cached.timestamp })
@@ -36,7 +40,8 @@ export async function GET() {
   return NextResponse.json({ description, fresh: true, updatedAt: Date.now() })
 }
 
-export async function POST() {
+export async function POST(request: Request) {
+  console.log(`[api] POST /api/database — force refresh ${request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"}`)
   const { description } = await fetchDescription()
   return NextResponse.json({ description, fresh: true, updatedAt: Date.now() })
 }
