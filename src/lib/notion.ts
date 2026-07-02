@@ -12,19 +12,19 @@ const NOTION_TOKEN = process.env.NOTION_TOKEN!
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID!
 const NOTION_VERSION = "2022-06-28"
 
-function getTitle(prop: any): string {
-  return prop?.title?.[0]?.plain_text ?? ""
+export function getTitle(prop: any): string {
+  return prop?.title?.map((t: any) => t.plain_text).join("") ?? ""
 }
 
-function getRichText(prop: any): string {
-  return prop?.rich_text?.[0]?.plain_text ?? ""
+export function getRichText(prop: any): string {
+  return prop?.rich_text?.map((t: any) => t.plain_text).join("") ?? ""
 }
 
-function getStatus(prop: any): string | null {
+export function getStatus(prop: any): string | null {
   return prop?.status?.name ?? null
 }
 
-function getDate(prop: any): string | null {
+export function getDate(prop: any): string | null {
   return prop?.date?.start ?? null
 }
 

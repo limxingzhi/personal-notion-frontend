@@ -22,7 +22,7 @@ async function fetchDescription() {
   }
 
   const data: any = await res.json()
-  const description = data.description?.[0]?.plain_text ?? ""
+  const description = data.description?.map((t: any) => t.plain_text).join("") ?? ""
   await writeCache(description, "description")
   return { description }
 }
