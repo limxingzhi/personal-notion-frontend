@@ -147,7 +147,7 @@ export default function HomePageClient({
         <div className="space-y-6">
           {sections.map(([status, items]) => (
             <section key={status}>
-              <h2 className="mb-1 flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              <h2 className="mb-1 flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100">
                 <span className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
                 {status}
                 <span className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
