@@ -3,7 +3,8 @@ import { readCache, writeCache } from "@/lib/cache"
 import { fetchFromNotion } from "@/lib/notion"
 
 export async function GET(request: Request) {
-  console.log(`[api] GET /api/tasks ${request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"}`)
+  const ip = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"
+  console.log(`[api] ${ip} GET /api/tasks`)
   const cached = await readCache()
 
   if (cached) {
@@ -18,7 +19,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  console.log(`[api] POST /api/tasks — force refresh ${request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"}`)
+  const ip = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"
+  console.log(`[api] ${ip} POST /api/tasks — force refresh`)
   const tasks = await fetchFromNotion()
   await writeCache(tasks)
   return NextResponse.json({ tasks, fresh: true, updatedAt: Date.now() })

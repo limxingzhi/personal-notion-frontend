@@ -31,7 +31,8 @@ async function fetchDescription() {
 }
 
 export async function GET(request: Request) {
-  console.log(`[api] GET /api/database ${request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"}`)
+  const ip = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"
+  console.log(`[api] ${ip} GET /api/database`)
   const cached = await readCache("description")
   if (cached) {
     return NextResponse.json({ description: cached.data, fresh: cached.fresh, updatedAt: cached.timestamp })
@@ -41,7 +42,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  console.log(`[api] POST /api/database — force refresh ${request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"}`)
+  const ip = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown"
+  console.log(`[api] ${ip} POST /api/database — force refresh`)
   const { description } = await fetchDescription()
   return NextResponse.json({ description, fresh: true, updatedAt: Date.now() })
 }
