@@ -128,7 +128,7 @@ export default function HomePageClient({
           <button
             onClick={() => fetchTasks(true)}
             disabled={loading}
-            className="rounded border px-3 py-1 text-sm transition hover:bg-gray-100 disabled:opacity-50 dark:border-gray-600 dark:hover:bg-gray-800"
+            className="cursor-pointer rounded border px-3 py-1 text-sm transition hover:bg-gray-100 disabled:opacity-50 dark:border-gray-600 dark:hover:bg-gray-800"
           >
             {loading ? "Loading..." : "Refresh"}
           </button>
